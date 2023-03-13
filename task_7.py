@@ -14,8 +14,8 @@
 
 
 def clear_screen():
-	"""
-	Clears the terminal for Windows and Linux/MacOS.
+    """
+    Clears the terminal for Windows and Linux/MacOS.
 
 	:return: None
 	"""
