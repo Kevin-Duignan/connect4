@@ -1,3 +1,4 @@
+Oliver
 def validate_input(prompt, valid_inputs):
 	"""
 	Repeatedly ask user for input until they enter an input
@@ -8,7 +9,15 @@ def validate_input(prompt, valid_inputs):
 	:return: The user's input, string.
 	"""
 	# Implement your solution below
-	
+print(prompt,end="")
+enter = input()
+if enter in valid_inputs:
+    return enter
+else:
+    print("Invalid input, please try again.")
+    return validate_input(prompt,valid_inputs)
+    
+raise NotImplementedError
 
 
 if __name__ == "__main__":
