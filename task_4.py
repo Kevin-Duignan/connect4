@@ -10,7 +10,15 @@ def drop_piece(board, player, column):
 	:param column: The index of column to drop the piece into, int.
 	:return: True if piece was successfully dropped, False if not.
 	"""
-	# Implement your solution below
+	# Iterate through each row from bottom up
+	for row in reversed(board):
+		# Drop player token in the lowest free space
+		if row[column] == 0:
+			row[column] = player
+			return True
+
+	# If all spaces are filled (no 0s)
+	return False
 
 
 def create_board():
