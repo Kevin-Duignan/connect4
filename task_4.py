@@ -1,3 +1,4 @@
+# Kevin
 def drop_piece(board, player, column):
 	"""
 	Drops a piece into the game board in the given column.
@@ -10,7 +11,6 @@ def drop_piece(board, player, column):
 	:return: True if piece was successfully dropped, False if not.
 	"""
 	# Implement your solution below
-	raise NotImplementedError
 
 
 def create_board():
