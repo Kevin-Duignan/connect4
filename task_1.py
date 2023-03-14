@@ -1,4 +1,4 @@
-# Oliver
+# Oliver + Jonathon
 def validate_input(prompt, valid_inputs):
     """
     Repeatedly ask user for input until they enter an input

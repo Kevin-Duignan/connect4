@@ -23,13 +23,12 @@ def drop_piece(board, player, column):
 
 
 def create_board():
-    # Copy your solution from task 2 here
-    return [[0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0]]
+
+    # Implement your solution below
+    board_row = 6
+    board_col = 7
+    board = [[0 for i in range(board_col)] for i in range(board_row)]
+    return board
 
 
 if __name__ == "__main__":

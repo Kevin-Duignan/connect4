@@ -20,20 +20,12 @@ def validate_input(prompt, valid_inputs):
 
 # Copy and paste create_board here
 def create_board():
-    """
-    Returns a 2D list of 6 rows and 7 columns to represent
-    the game board. Default cell value is 0.
 
-    :return: A 2D list of 6x7 dimensions.
-    """
     # Implement your solution below
-    return [[0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0]]
-
+    board_row = 6
+    board_col = 7
+    board = [[0 for i in range(board_col)] for i in range(board_row)]
+    return board
 
 # Copy and paste drop_piece here
 def drop_piece(board, player, column):
