@@ -13,14 +13,14 @@ def print_board(board):
 	print("  1   2   3   4   5   6   7")
 	print(" --- --- --- --- --- --- ---")
 	for row in range(board_row):
-		print("| ", end = "")
+		print("|", end = "")
 		for col in range(board_col):
 			if board[row][col] == 1:
-				print("X |", end = " ")
+				print(" X |", end = "")
 			elif board[row][col] == 2:
-				print("O |", end = " ")
+				print(" O |", end = "")
 			elif board[row][col] == 0:
-				print("  |", end = " ")
+				print("   |", end = "")
 		print("\n --- --- --- --- --- --- ---")
 	print("=============================")
 

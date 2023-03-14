@@ -7,12 +7,10 @@ def create_board():
     :return: A 2D list of 6x7 dimensions.
     """
     # Implement your solution below
-    return [[0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0]]
+    board_row = 6
+    board_col = 7
+    board = [[0 for i in range(board_col)] for i in range(board_row)]
+    return board
 
 
 if __name__ == "__main__":
