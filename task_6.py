@@ -1,3 +1,4 @@
+# Rohit
 def end_of_game(board):  # Question 6 - Rohit
     """
     Checks if the game has ended with a winner
@@ -112,3 +113,13 @@ def end_of_game(board):  # Question 6 - Rohit
             final_result = 3
 
     return final_result
+
+board = [
+    [1, 2, 1, 1, 2, 2, 0],
+    [2, 1, 2, 2, 1, 2, 2],
+    [2, 1, 1, 2, 1, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 2, 2, 1, 1, 1, 2],
+    [2, 2, 2, 1, 2, 1, 2]]
+
+print(end_of_game(board))
