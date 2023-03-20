@@ -66,7 +66,7 @@ def end_of_game(board): # Question 6 - Rohit
 		for row in board:
 			splice_int1 = 0
 			for i in range(possibilities):
-				if 0 in row[splice_int1:(splice_int1+4)] and 1 not in row[splice_int1:(splice_int1+4)] and 2 not in row[splice_int1:(splice_int1+4)] and 3 not in row[splice_int1:(splice_int1+4)]:
+				if 0 in row[splice_int1:(splice_int1+4)]:
 					game_can_continue = 0
 				if 0 in row[splice_int1:(splice_int1+4)] or 3 in row[splice_int1:(splice_int1+4)]:
 					splice_int1 += 1
