@@ -81,34 +81,29 @@ def end_of_game(board):  # Question 6 - Rohit
                     game_status = row[splice_int1:(splice_int1 + 4)][0]
         return ([game_status, game_can_continue])
 
-<<<<<<< HEAD
-	
-	#function to check the status of game by verifying spliced lists of all rows of the boards
-	def check_game_status(board, possibilities):
-		game_status = 0
-		game_can_continue = -1
-		for row in board:
-			splice_int1 = 0
-			for i in range(possibilities):
-				if 0 in row[splice_int1:(splice_int1+4)]:
-					game_can_continue = 0
-				if 0 in row[splice_int1:(splice_int1+4)] or 3 in row[splice_int1:(splice_int1+4)]:
-					splice_int1 += 1
-					pass
-				elif 1 in row[splice_int1:(splice_int1+4)] and 2 in row[splice_int1:(splice_int1+4)]:
-					splice_int1 += 1
-					pass
-				else:
-					game_status = row[splice_int1:(splice_int1+4)][0]
-		return([game_status, game_can_continue])
-	
-	#check horizontal wins 
-	#print(check_game_status(board, 4))
-=======
+        # function to check the status of game by verifying spliced lists of all rows of the boards
+    def check_game_status(board, possibilities):
+        game_status = 0
+        game_can_continue = -1
+        for row in board:
+            splice_int1 = 0
+            for i in range(possibilities):
+                if 0 in row[splice_int1:(splice_int1 + 4)]:
+                    game_can_continue = 0
+                if 0 in row[splice_int1:(splice_int1 + 4)] or 3 in row[splice_int1:(splice_int1 + 4)]:
+                    splice_int1 += 1
+                    pass
+                elif 1 in row[splice_int1:(splice_int1 + 4)] and 2 in row[splice_int1:(splice_int1 + 4)]:
+                    splice_int1 += 1
+                    pass
+                else:
+                    game_status = row[splice_int1:(splice_int1 + 4)][0]
+        return ([game_status, game_can_continue])
+
     # check horizontal wins
     # print(check_game_status(board, 4))
->>>>>>> refs/remotes/origin/main
-
+    # check horizontal wins
+    # print(check_game_status(board, 4))
     # check vertical wins
     # print(check_game_status(vert_board, 3))
 
@@ -138,6 +133,7 @@ def end_of_game(board):  # Question 6 - Rohit
             final_result = 3
 
     return final_result
+
 
 board = [
     [1, 2, 1, 1, 2, 2, 0],
