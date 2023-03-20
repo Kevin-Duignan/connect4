@@ -42,6 +42,9 @@ def drop_piece(board, player, column):
     # Iterate through each row from bottom up
     for row in reversed(board):
         # Drop player token in the lowest free space
+        # Check for valid column input
+        if column < 1 or column > 7:
+            return False
         # Array index start at 0, but humans count from 1, so minus one from input column account for that
         if row[column - 1] == 0:
             row[column - 1] = player
