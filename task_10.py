@@ -166,7 +166,7 @@ def cpu_player_medium(board, player):
 		if i[2] == player:
 			return(i[1])
 		else:
-			cpu_move = i[2]
+			cpu_move = i[1]
 	return(cpu_move)
 
 board = [
