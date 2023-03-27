@@ -67,7 +67,7 @@ def execute_player_turn(player, board):  # Task 5
         if drop_piece(board, player, column):
             return column
         else:
-            print("That column is full, please try again.")
+            print("Invalid turn, please try again.")
 
 
 if __name__ == "__main__":
