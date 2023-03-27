@@ -34,8 +34,8 @@ def cpu_player_easy(board, player):
 	:return: Column that the piece was dropped into, int.
 	"""
 	# Implement your solution below
-	random_column = random.randint(1, 7)
 	while True:
+		random_column = random.randint(1, 7)
 		if drop_piece(board, player, random_column):
 			return random_column
 
