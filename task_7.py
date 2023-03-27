@@ -1,22 +1,4 @@
-# Copy and paste validate_input here
-def validate_input(prompt, valid_inputs):
-	"""
-	Repeatedly ask user for input until they enter an input
-	within a set valid of options.
-
-	:param prompt: The prompt to display to the user, string.
-	:param valid_inputs: The range of values to accept, list
-	:return: The user's input, string.
-	"""
-	# Implement your solution below
-	print(prompt, end="")
-	enter = input()
-	if enter in valid_inputs:
-		return enter
-	else:
-		print("Invalid input, please try again.")
-		return validate_input(prompt, valid_inputs)
-
+# Kevin
 # Copy and paste create_board here
 def create_board():
 	"""
@@ -71,12 +53,12 @@ def drop_piece(board, player, column):
 	:return: True if piece was successfully dropped, False if not.
 	"""
 	# Iterate through each row from bottom up
-	for row in reversed(board):
-		# Drop player token in the lowest free space
-		# Array index start at 0, but humans count from 1, so minus one from input column account for that
-		if row[column - 1] == 0:
-			row[column - 1] = player
-			return True
+	if 1 <= column <= 7:
+		for row in reversed(board):
+			# Drop player token in the lowest free space
+			if row[column - 1] == 0:
+				row[column - 1] = player
+				return True
 
 	# If all spaces are filled (no 0s)
 	return False
@@ -95,10 +77,10 @@ def execute_player_turn(player, board):  # Task 5
 		if drop_piece(board, player, column):
 			return column
 		else:
-			print("That column is full, please try again.")
+			print("Invalid turn, please try again.")
 
 # Copy and paste end_of_game here
-def end_of_game(board):  # Question 6 - Rohit
+def end_of_game(board):  
 	"""
 	Checks if the game has ended with a winner
 	or a draw.
@@ -180,18 +162,24 @@ def end_of_game(board):  # Question 6 - Rohit
 					game_status = row[splice_int1:(splice_int1 + 4)][0]
 		return ([game_status, game_can_continue])
 
-	# check horizontal wins
-	# print(check_game_status(board, 4))
-
-	# check vertical wins
-	# print(check_game_status(vert_board, 3))
-
-	# check diagonal wins
-	# forwards_diagonal
-	# print(check_game_status(diagonal_board(board), 3))
-
-	# backwards_diagonal
-	# print(check_game_status(diagonal_board(reversed_board), 3))
+		# function to check the status of game by verifying spliced lists of all rows of the boards
+	def check_game_status(board, possibilities):
+		game_status = 0
+		game_can_continue = -1
+		for row in board:
+			splice_int1 = 0
+			for i in range(possibilities):
+				if 0 in row[splice_int1:(splice_int1 + 4)]:
+					game_can_continue = 0
+				if 0 in row[splice_int1:(splice_int1 + 4)] or 3 in row[splice_int1:(splice_int1 + 4)]:
+					splice_int1 += 1
+					pass
+				elif 1 in row[splice_int1:(splice_int1 + 4)] and 2 in row[splice_int1:(splice_int1 + 4)]:
+					splice_int1 += 1
+					pass
+				else:
+					game_status = row[splice_int1:(splice_int1 + 4)][0]
+		return ([game_status, game_can_continue])
 
 	# computing final status of game
 	final_result = 0
@@ -213,8 +201,26 @@ def end_of_game(board):  # Question 6 - Rohit
 
 	return final_result
 
-#Don't forget to include any helper functions you may have created
 
+# Copy and paste local_2_player_game here
+
+def print_rules():
+	"""
+	Prints the rules of the game.
+
+	:return: None
+	"""
+	print("================= Rules =================")
+	print("Connect 4 is a two-player game where the")
+	print("objective is to get four of your pieces")
+	print("in a row either horizontally, vertically")
+	print("or diagonally. The game is played on a")
+	print("6x7 grid. The first player to get four")
+	print("pieces in a row wins the game. If the")
+	print("grid is filled and no player has won,")
+	print("the game is a draw.")
+	print("=========================================")
+	
 
 def clear_screen():
 	"""
@@ -224,18 +230,58 @@ def clear_screen():
 	"""
 	import os
 	os.system('cls' if os.name == 'nt' else 'clear')
-	
 
+	
 def local_2_player_game():
 	"""
-	Runs a local 2 player game of Connect 4.
+	Defines the main application loop.
+	User chooses a type of game to play or to exit.
 
 	:return: None
 	"""
 	# Implement your solution below
-	raise NotImplementedError
+	
+	turn_counter = 0
+	
+	# Do While
+	while True:
+		clear_screen()
+		print_board(board)
+		# If start of game
+		if turn_counter == 0:
+			# Player 1 starts
+			print("Your turn to start, Player 1!")
+			move = execute_player_turn(1, board)
+			turn_counter += 1
+			game_status = end_of_game(board)
+		
+		# Else if in the middle of a game	
+		elif game_status == 0:
+			# Compute player turn
+			player = (turn_counter % 2) + 1 # Even turn is p1, odd turn is p2
+			previous_player = ((turn_counter - 1) % 2) + 1 # Last turn
+			
+			# Previous move and prompt for next move
+			print(f"Player {previous_player}'s turn was column {move}.")
+			move = execute_player_turn(player, board)
+			
+			turn_counter += 1
+			game_status = end_of_game(board)
+		
+		# If game is over
+		else:
+			break
 
+	# When game has ended
+	if game_status == 3:
+		print("It's a draw!")
+	else:
+		# execute_player_turn returns player number if that player wins
+		print(f"Player {game_status} wins!")
+		
+
+
+board = board = [[0 for i in range(7)] for i in range(6)]
 
 if __name__ == "__main__":
-	# Enter test code below
 	local_2_player_game()
