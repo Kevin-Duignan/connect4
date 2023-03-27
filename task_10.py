@@ -1,6 +1,28 @@
 import random
 
 # Copy and paste any code from previous tasks here
+def drop_piece(board, player, column):
+    """
+    Drops a piece into the game board in the given column.
+    Please note that this function expects the column index
+    to start at 1.
+
+    :param board: The game board, 2D list of 6x7 dimensions.
+    :param player: The player dropping the piece, int.
+    :param column: The index of column to drop the piece into, int.
+    :return: True if piece was successfully dropped, False if not.
+    """
+    # Iterate through each row from bottom up
+    for row in reversed(board):
+        # Drop player token in the lowest free space
+        # Array index start at 0, but humans count from 1, so minus one from input column account for that
+        if row[column - 1] == 0:
+            row[column - 1] = player
+            return True
+
+    # If all spaces are filled (no 0s)
+    return False
+
 
 def cpu_player_medium(board, player):
 	"""
@@ -153,7 +175,7 @@ def cpu_player_medium(board, player):
 				d=[]
 				d+=[[b[0],b[1],b[3]]]
 				move_deciding+=d
-	#print(move_deciding)
+
 	fin_move = []
 	for i in move_deciding:
 		if i[0]!=len(board):
@@ -167,6 +189,12 @@ def cpu_player_medium(board, player):
 			return(i[1])
 		else:
 			cpu_move = i[1]
+
+	while cpu_move == -1:
+		rand = random.randrange(1,8)
+		if drop_piece(board, player, rand) == True:
+			cpu_move = rand
+
 	return(cpu_move)
 
 board = [
