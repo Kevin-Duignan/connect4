@@ -318,7 +318,8 @@ def main():
 		local_2_player_game()
 	elif user_input == "3":
 		clear_screen()
-		cpu_player_easy(board, player)
+		# TODO: game_against_cpu()
+		raise NotImplementedError
 	elif user_input == "4":
 		clear_screen()
 		exit()
