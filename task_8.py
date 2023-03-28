@@ -300,6 +300,7 @@ def main():
     User chooses a type of game to play or to exit.
 	:return: None
 	"""
+	clear_screen()
 	# Implement your solution below
 	print("=============== Main Menu ===============")
 	print("Welcome to Connect 4!")
@@ -310,16 +311,27 @@ def main():
 	print("=========================================")
 
 	user_input = validate_input("Please select an option (1, 2, 3, 4): ", ["1", "2", "3", "4"])
+	
 	if user_input == "1":
 		clear_screen()
 		print_rules()
+		home_input = validate_input("Please select an option (home, exit): ", ["home", "exit"])
+		if home_input == "home":
+			main()
+		elif home_input == "exit":
+			exit()
 	elif user_input == "2":
 		clear_screen()
 		local_2_player_game()
 	elif user_input == "3":
 		clear_screen()
-		# TODO: game_against_cpu()
-		raise NotImplementedError
+		cpu_input = validate_input("Please select an option (easy, medium, hard): ", ["easy", "medium", "hard"])
+		if cpu_input == "easy":
+			cpu_player_easy(board, player)
+		elif cpu_input == "medium":
+			cpu_player_medium(board, player)
+		elif cpu_input == "hard":
+			cpu_player_hard(board, player)
 	elif user_input == "4":
 		clear_screen()
 		exit()
