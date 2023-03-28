@@ -1,5 +1,6 @@
-# Rohit
-def end_of_game(board):  # Question 6 - Rohit
+# Rohit original
+# Kevin reimplementation
+def end_of_game(board):  
     """
     Checks if the game has ended with a winner
     or a draw.
@@ -8,28 +9,27 @@ def end_of_game(board):  # Question 6 - Rohit
     :return: 0 if game is not over, 1 if player 1 wins, 2 if player 2 wins, 3 if draw.
     """
       
-    # # * Rows -> List of Strings
-    # for row in board:
-    #     row_str = "".join([str(i) for i in row])
-        
-    #     # Check if row has a win
-    #     if "1111" in row_str:
-    #         return 1
-    #     elif "2222" in row_str:
-    #         return 2
+    # * Rows -> List of Strings
+    for row in board:
+        row_str = "".join([str(i) for i in row])
+        # Check if row has a win
+        if "1111" in row_str:
+            return 1
+        elif "2222" in row_str:
+            return 2d                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
             
-    # # * Columns -> List of Strings
-    # for i in range(len(board[0])): # Length of each row in original board
-    #     column_string = ""
-    #     # Concatenate elements of ith index from each row into a string
-    #     for row in board:
-    #         column_string += str(row[i])
+    # * Columns -> List of Strings
+    for i in range(len(board[0])): # Length of each row in original board
+        column_string = ""
+        # Concatenate elements of ith index from each row into a string
+        for row in board:
+            column_string += str(row[i])
         
-    #     # Check if column has a win
-    #     if "1111" in column_string:
-    #         return 1
-    #     elif "2222" in column_string:
-    #         return 2
+        # Check if column has a win
+        if "1111" in column_string:
+            return 1
+        elif "2222" in column_string:
+            return 2
         
     
 
@@ -43,7 +43,7 @@ def end_of_game(board):  # Question 6 - Rohit
 
 
 board = [
-    [1, 2, 1, 1, 2, 2, 1],
+    [1, 2, 1, 1, 2, 2, 0],
     [2, 1, 2, 2, 1, 2, 2],
     [2, 1, 1, 2, 1, 2, 1],
     [1, 1, 1, 1, 1, 1, 1],
