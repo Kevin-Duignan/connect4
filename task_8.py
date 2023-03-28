@@ -293,7 +293,38 @@ def clear_screen():
 	import os
 	os.system('cls' if os.name == 'nt' else 'clear')
 
+def game_against_cpu():
+	"""
+	Runs a game of Connect 4 against the computer.
 
+	:return: None
+	"""
+	clear_screen()
+	cpu_input = validate_input("Please select an option (easy, medium, hard): ", ["easy", "medium", "hard"])
+	if cpu_input == "easy":
+		cpu_player_easy(board, player)
+	elif cpu_input == "medium":
+		# TODO: reimplementing cpu_player_medium(board, player)
+		pass
+	elif cpu_input == "hard":
+		# TODO: implementing cpu_player_hard(board, player)
+		pass
+
+def cpu_player_easy(board, player):
+	"""
+	Executes a move for the CPU on easy difficulty. This function 
+	plays a randomly selected column.
+
+	:param board: The game board, 2D list of 6x7 dimensions.
+	:param player: The player whose turn it is, integer value of 1 or 2.
+	:return: Column that the piece was dropped into, int.
+	"""
+	# Implement your solution below
+	while True:
+		random_column = random.randint(1, 7)
+		if drop_piece(board, player, random_column):
+			return random_column
+		
 def main():
 	"""
 	Defines the main application loop.
@@ -325,8 +356,7 @@ def main():
 		local_2_player_game()
 	elif user_input == "3":
 		clear_screen()
-		# TODO: game_against_cpu()
-		raise NotImplementedError
+		game_against_cpu():
 	elif user_input == "4":
 		clear_screen()
 		exit()
