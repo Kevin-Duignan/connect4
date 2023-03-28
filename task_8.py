@@ -325,13 +325,8 @@ def main():
 		local_2_player_game()
 	elif user_input == "3":
 		clear_screen()
-		cpu_input = validate_input("Please select an option (easy, medium, hard): ", ["easy", "medium", "hard"])
-		if cpu_input == "easy":
-			cpu_player_easy(board, player)
-		elif cpu_input == "medium":
-			cpu_player_medium(board, player)
-		elif cpu_input == "hard":
-			cpu_player_hard(board, player)
+		# TODO: game_against_cpu()
+		raise NotImplementedError
 	elif user_input == "4":
 		clear_screen()
 		exit()
