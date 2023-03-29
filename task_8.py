@@ -292,8 +292,7 @@ def clear_screen():
 	"""
 	import os
 	os.system('cls' if os.name == 'nt' else 'clear')
-
-
+		
 def main():
 	"""
 	Defines the main application loop.
@@ -325,7 +324,7 @@ def main():
 		local_2_player_game()
 	elif user_input == "3":
 		clear_screen()
-		game_against_cpu():
+		# TODO: game_against_cpu()
 	elif user_input == "4":
 		clear_screen()
 		exit()
