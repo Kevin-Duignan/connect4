@@ -1,5 +1,5 @@
 # Rohit original
-# Kevin reimplementation
+# Kevin re-implementation
 
 
 def end_of_game(board):
@@ -73,7 +73,6 @@ def end_of_game(board):
         return exists  # Returning the value from win() to main
     # Diagonal \
     flipped_board = [row for row in reversed(board)]
-    print(flipped_board)
     exists = diagonal_check(flipped_board)
     if exists:
         return exists
@@ -84,16 +83,3 @@ def end_of_game(board):
             return 0  # Still empty slots left
     else:
         return 3  # All slots are filled and no win
-
-
-board = [
-    [2, 2, 2, 1, 0, 0, 0],
-    [2, 2, 1, 0, 0, 0, 0],
-    [2, 1, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-]
-
-
-print(end_of_game(board))
