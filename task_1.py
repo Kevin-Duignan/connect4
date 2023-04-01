@@ -20,5 +20,4 @@ def validate_input(prompt, valid_inputs):
 
 if __name__ == "__main__":
     # Enter test code below
-    user_input = validate_input(
-        "Please select an option (a, b, c): ", ["a", "b", "c"])
+    user_input = validate_input("Please select an option (a, b, c): ", ["a", "b", "c"])

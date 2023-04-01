@@ -27,6 +27,7 @@ def create_board():
     board = [[0 for i in range(board_col)] for i in range(board_row)]
     return board
 
+
 # Copy and paste drop_piece here
 def drop_piece(board, player, column):
     """
@@ -62,7 +63,11 @@ def execute_player_turn(player, board):  # Task 5
     :return: Column that the piece was dropped into, int.
     """
     while True:
-        column = int(input(f"Player {player}, please enter the column you would like to drop your piece into: "))
+        column = int(
+            input(
+                f"Player {player}, please enter the column you would like to drop your piece into: "
+            )
+        )
         # drop_piece returns true if there is space
         if drop_piece(board, player, column):
             return column
