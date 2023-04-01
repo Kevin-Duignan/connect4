@@ -226,47 +226,33 @@ def cpu_player_medium(board, player):
     :param player: The player whose turn it is, integer value of 1 or 2.
     :return: Column that the piece was dropped into, int.
     """
-    opponent = 0
-    if player == 1:
-        opponent = 2
-    else:
-        opponent = 1
+    cpu_player = player
+    human_player = 1 if cpu_player == 2 else 2
 
-    player_move = -1
-    opponent_move = -1
-
-    for i in range(7):
+    # Check for any possibility of win 
+    for col_index in range(len(board[0])): 
+        cpu_move = col_index + 1
         new_board = [row[:] for row in board]
-        if drop_piece(new_board, player, i + 1) == True:
-            new_board = [row[:] for row in board]
-            row_index = 6
-            for row in new_board:
-                row_index -= 1
-                if new_board[row_index][i] == 0:
-                    new_board[row_index][i] = player
-                    if end_of_game(new_board) == player:
-                        new_board = [row[:] for row in board]
-                        drop_piece(board, player, i + 1)
-                        return i + 1
+        if drop_piece(new_board, cpu_player, cpu_move):
+            if end_of_game(new_board) == cpu_player:
+                drop_piece(board, cpu_player, cpu_move) # Do a real drop
+                return cpu_move
+    
+    # Check for any possibility of loss
+    for col_index in range(len(board[0])):
+        human_move = col_index + 1
+        new_board = [row[:] for row in board]
+        if drop_piece(new_board, human_player, human_move): # Simulate drop for human
+            if end_of_game(new_board) == human_player: # If that drop wins for the human
+                cpu_move = human_move
+                drop_piece(board, cpu_player, cpu_move) # Block that drop with cpu move
+                return cpu_move
 
-                    else:
-                        new_board = [row[:] for row in board]
-                        new_board[row_index][i] = opponent
-                        if end_of_game(new_board) == opponent:
-                            if opponent_move == -1:
-                                opponent_move = i + 1
-
-    cpu_move = -1
-    cpu_move = opponent_move
-
-    while cpu_move == -1:
-        rand = random.randrange(1, 8)
-        if drop_piece(board, player, rand) == True:
-            cpu_move = rand
-            return rand
-
-    drop_piece(board, player, cpu_move)
-    return cpu_move
+    # If no move to block or win
+    while True:
+        cpu_move = random.randrange(1, 8)  # random place to drop
+        if drop_piece(board, player, cpu_move):
+            return cpu_move
 
 
 # Copy and paste cpu_player_hard
