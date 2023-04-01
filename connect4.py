@@ -367,7 +367,7 @@ def cpu_player_medium(board, player):
 
     # If no move to block or win
     while True:
-        cpu_move = random.randrange(1, 8)  # random place to drop
+        cpu_move = random.randrange(1, 7)  # random place to drop
         if drop_piece(board, player, cpu_move):
             return cpu_move
 
