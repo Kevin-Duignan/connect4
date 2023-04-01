@@ -1,3 +1,4 @@
+import random
 def drop_piece(board, player, column):
     """
     Drops a piece into the game board in the given column.
@@ -123,7 +124,7 @@ def cpu_player_hard(board, player):
 
 	PLAYER_TURN = 1
 	CPU_TURN = 2
-	# Takes the current board position with one new move and calculates static evaluation of that move
+	# Takes the current board position with one new move and calculates static evaluation of that move with regards to how good it is to the CPU
 	def score_position(board, game_status):
 		if game_status != 0:
 			if game_status == 2: # CPU winning move
@@ -136,6 +137,9 @@ def cpu_player_hard(board, player):
 		# TODO: Strategy to evaluate the score (likelihood to win) of a current position
 
 	def minimax(board, depth, is_cpu_move):
+		while True:
+			if not column:
+				column = random.randint(1, 7)
 		game_status = end_of_game(board)
 		if depth == 0 or game_status != 0:
 			return score_position(board, game_status)
@@ -145,7 +149,8 @@ def cpu_player_hard(board, player):
 				if col_value != 0: # If the first row of the board if not empty the board is filled
 					continue
 				new_board = [row for row in board]
-				drop_piece(new_board, col_index + 1, CPU_TURN)
+				column = col_index + 1
+				drop_piece(new_board, column, CPU_TURN)
 				score = minimax(new_board, depth - 1, False) # Computes the score for the player move 
 				max_score = max(score, max_score)
 		else: # Player move 
@@ -154,7 +159,8 @@ def cpu_player_hard(board, player):
 				if col_value != 0: # If the first row of the board if not empty the board is filled
 					continue
 				new_board = [row for row in board]
-				drop_piece(new_board, col_index + 1, PLAYER_TURN)
+				column = col_index + 1
+				drop_piece(new_board, column, PLAYER_TURN)
 				score = minimax(new_board, depth - 1, True) # Computes the score for the player move 
 				min_score = min(score, min_score)
 				
