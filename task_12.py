@@ -446,13 +446,6 @@ def game_against_cpu():
 	:return: None
 	"""
 	cpu_input = validate_input("Please select an option (easy, medium, hard): ", ["easy", "medium", "hard"])
-	# if cpu_input == "easy":
-	# 	cpu_player_easy(board, player)
-	# elif cpu_input == "medium":
-	# 	cpu_player_medium(board, player)
-	# elif cpu_input == "hard":
-	# 	cpu_player_hard(board, player)
-
 
 	turn_counter = 0
 
