@@ -1,4 +1,6 @@
 import random
+
+
 def drop_piece(board, player, column):
     """
     Drops a piece into the game board in the given column.
@@ -137,30 +139,33 @@ def cpu_player_hard(board, player):
 		# TODO: Strategy to evaluate the score (likelihood to win) of a current position
 
 	def minimax(board, depth, is_cpu_move):
-		while True:
-			if not column:
-				column = random.randint(1, 7)
 		game_status = end_of_game(board)
 		if depth == 0 or game_status != 0:
-			return score_position(board, game_status)
+			return (score_position(board, game_status), None)
 		if is_cpu_move:
 			max_score = -1000
 			for col_value, col_index in enumerate(board[0]):
 				if col_value != 0: # If the first row of the board if not empty the board is filled
 					continue
 				new_board = [row for row in board]
-				column = col_index + 1
-				drop_piece(new_board, column, CPU_TURN)
-				score = minimax(new_board, depth - 1, False) # Computes the score for the player move 
-				max_score = max(score, max_score)
+				drop_piece(new_board, col_index + 1, CPU_TURN)
+				score = minimax(new_board, depth - 1, False)[0] # Computes the score for the player move 
+				# Saves the value of the column if a higher score is computed 
+				if score > max_score:
+					max_score = score
+					max_score_column = col_index + 1
+			return (max_score, max_score_column)
 		else: # Player move 
 			min_score = 1000	
 			for col_value, col_index in enumerate(board[0]):
 				if col_value != 0: # If the first row of the board if not empty the board is filled
 					continue
 				new_board = [row for row in board]
-				column = col_index + 1
-				drop_piece(new_board, column, PLAYER_TURN)
-				score = minimax(new_board, depth - 1, True) # Computes the score for the player move 
+				drop_piece(new_board, max_score_column, PLAYER_TURN)
+				score = minimax(new_board, depth - 1, True)[0] # Computes the score for the player move 
 				min_score = min(score, min_score)
+				if score > min_score:
+					min_score = score
+					min_score_column = col_index + 1
+			return (min_score, min_score_column)
 				
