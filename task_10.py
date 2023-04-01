@@ -126,32 +126,26 @@ def cpu_player_medium(board, player):
 		opponent = 2
 	else:
 		opponent = 1
-	
-	def duplicate_board(board):
-		new_brd = []
-		for row in board:
-			new_brd+=[row[:]]
-		return new_brd
-	
+
 	player_move = -1
 	opponent_move = -1
 
 	for i in range(7):
-		new_board = duplicate_board(board)
+		new_board = [row[:] for row in board]
 		if drop_piece(new_board, player, i + 1) == True:
-			new_board = duplicate_board(board)
+			new_board = [row[:] for row in board]
 			row_index = 6
 			for row in (new_board):
 				row_index -= 1
 				if new_board[row_index][i] == 0:
 					new_board[row_index][i] = player
 					if end_of_game(new_board) == player:
-						new_board = duplicate_board(board)
+						new_board = [row[:] for row in board]
 						drop_piece(board, player, i + 1)
 						return i + 1
 
 					else:
-						new_board =  duplicate_board(board)
+						new_board =  [row[:] for row in board]
 						new_board[row_index][i] = opponent
 						if end_of_game(new_board) == opponent:
 							if opponent_move == -1:
@@ -166,7 +160,8 @@ def cpu_player_medium(board, player):
 		if drop_piece(board, player, rand) == True:
 			cpu_move = rand
 			return rand
-	
+
+	drop_piece(board, player, cpu_move)
 	return cpu_move
 
 board = [
