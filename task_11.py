@@ -151,7 +151,7 @@ def cpu_player_hard(board, player):
 				drop_piece(new_board, col_index + 1, CPU_TURN)
 				score = minimax(new_board, depth - 1, False)[0] # Computes the score for the player move 
 				# Saves the value of the column if a higher score is computed 
-				if score > max_score:
+				if score >= max_score:
 					max_score = score
 					max_score_column = col_index + 1
 			return (max_score, max_score_column)
@@ -163,8 +163,7 @@ def cpu_player_hard(board, player):
 				new_board = [row for row in board]
 				drop_piece(new_board, max_score_column, PLAYER_TURN)
 				score = minimax(new_board, depth - 1, True)[0] # Computes the score for the player move 
-				min_score = min(score, min_score)
-				if score > min_score:
+				if score >= min_score:
 					min_score = score
 					min_score_column = col_index + 1
 			return (min_score, min_score_column)
