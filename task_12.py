@@ -1,4 +1,4 @@
-import random
+import random, math
 def validate_input(prompt, valid_inputs):
 	"""
 	Repeatedly ask user for input until they enter an input
@@ -275,10 +275,10 @@ def cpu_player_hard(board, player):
 	def playable_positions(board):
 		#print(board,1)
 		valid_pos = []
-		for col in range(len(board)):
+		for col in range(len(board[0])):
 			brd = [row[:] for row in board]
 			if drop_piece(brd, 1, col):
-				valid_pos += [col]
+				valid_pos += [col + 1]
 		return valid_pos
 
 	def static_eval(board, player):
