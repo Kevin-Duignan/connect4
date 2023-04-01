@@ -1,4 +1,5 @@
 import random
+import math
 
 
 def validate_input(prompt, valid_inputs):
@@ -264,13 +265,15 @@ def cpu_player_hard(board, player):
     This function creates a copy of the board to simulate moves.
 
     <Insert player strategy here>
-
-    :param board: The game board, 2D list of 6x7 dimensions.
-    :param player: The player whose turn it is, integer value of 1 or 2.
-    :return: Column that the piece was dropped into, int.
     """
-    # Implement your solution below
-    cpu_piece = 2
+    def playable_positions(board):
+        #print(board,1)
+        valid_pos = []
+        for col in range(len(board[0])):
+            brd = [row[:] for row in board]
+            if drop_piece(brd, 1, col):
+                valid_pos += [col + 1]
+        return valid_pos
 
     def playable_positions(board):
         # print(board,1)
