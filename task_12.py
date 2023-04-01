@@ -60,9 +60,6 @@ def print_board(board):
 	print("=============================")
 	
 # Copy and paste drop_piece here
-import random
-
-# Copy and paste drop_piece here
 def drop_piece(board, player, column):
 	"""
 	Drops a piece into the game board in the given column.
@@ -102,7 +99,7 @@ def execute_player_turn(player, board):  # Task 5
 			print("Invalid turn, please try again.")
 			
 # Copy and paste end_of_game here
-def end_of_game(board):  # Question 6 - Rohit
+def end_of_game(board):
 	"""
 	Checks if the game has ended with a winner
 	or a draw.
@@ -110,132 +107,83 @@ def end_of_game(board):  # Question 6 - Rohit
 	:param board: The game board, 2D list of 6 rows x 7 columns.
 	:return: 0 if game is not over, 1 if player 1 wins, 2 if player 2 wins, 3 if draw.
 	"""
-	# Implement your solution below
 
-	# creating another board that has its rows filled with the columns of the original board
-	vert_board = [0] * len(board[0])
+	# * Win Check
+	def win(string):
+		if "1111" in string:
+			return 1
+		elif "2222" in string:
+			return 2
 
-	def verti_row(board, board_column_index):
-		vert_row = [0] * len(board)
-		row_column_index = -1
+	# * Rows -> Strings
+	for row in board:
+		row_str = "".join([str(i) for i in row])
+		# If there's a win return the winner
+		exists = win(row_str)
+		if exists:
+			return exists
+	
+	# To check for draw further down
+	filled_slots = True
+	# * Columns -> Strings
+	for i in range(len(board[0])):  # Length of each row in original board
+		column_str = ""
+		# Concatenate elements of ith index from each row into a string
 		for row in board:
-			row_column_index += 1
-			vert_row[row_column_index] = row[board_column_index]
-		return vert_row
+			column_str += str(row[i])
+			# If empty spaces then won't be a draw
+			if row[i] == 0:
+				filled_slots = False
+		exists = win(column_str)
+		if exists:
+			return exists
 
-	column_index = -1
-	for i in vert_board:
-		column_index += 1
-		vert_board[column_index] = verti_row(board, column_index)
-
-	# creating another board that has its rows filled with the diagonals of the original board
-	def diagonal_row(board, row_index, column_index):
-		diag_row = ([3] * len(board))
-		diag_index = -1
-		for row in board:
-			if row_index <= len(board) - 1 and column_index <= len(board[0]) - 1:
-				diag_index += 1
-				diag_row[diag_index] = board[row_index][column_index]
-				column_index += 1
-				row_index += 1
+	# * Diagonals -> Strings
+	def diagonal_check(board):
+		for col in range(3, len(board[0])):  # 3-6
+			# Second half from right-most column down
+			if col == 6:
+				for row in range(3):  # 0-2
+					diagonal_str = ""
+					i = row
+					j = col
+					while i < col and j >= row:
+						diagonal_str += str(board[i][j])
+						i += 1
+						j -= 1
+					exists = win(diagonal_str)
+					if exists:
+						return exists
+			# First half from left most relevant column
 			else:
-				break
-		return diag_row
+				diagonal_str = ""
+				row = 0
+				i = row
+				j = col
+				# Do this until row and column number are switched
+				while i <= col and j >= row:
+					diagonal_str += str(board[i][j])
+					i += 1
+					j -= 1
+				exists = win(diagonal_str)
+				if exists:
+					return exists
 
-	def diagonal_board(board):
-		diag_board = [0] * (len(board) + (len(board[0]) - 1))
-		column_index = 0
-		row_index = len(board)
-		for i in range(len(board) + (len(board[0]) - 1)):
-			if row_index >= 1:
-				row_index -= 1
-			elif column_index <= (len(board[0]) - 1):
-				column_index += 1
-			diag_board[i] = diagonal_row(board, row_index, column_index)
-		return diag_board
+	# Diagonal /
+	exists = diagonal_check(board)
+	if exists:
+		return exists  # Returning the value from win() to main
+	# Diagonal \
+	flipped_board = [row for row in reversed(board)]
+	exists = diagonal_check(flipped_board)
+	if exists:
+		return exists
 
-	reversed_board = [0] * len(board)
-	index = 0
-	for i in board:
-		reversed_board[index] = i[::-1]
-		index += 1
-
-	# function to check the status of game by verifying spliced lists of all rows of the boards
-	def check_game_status(board, possibilities):
-		game_status = 0
-		game_can_continue = -1
-		for row in board:
-			splice_int1 = 0
-			for i in range(possibilities):
-				if 0 in row[splice_int1:(splice_int1 + 4)] and 1 not in row[
-																		splice_int1:(splice_int1 + 4)] and 2 not in row[
-																													splice_int1:(
-																															splice_int1 + 4)] and 3 not in row[
-																																						   splice_int1:(
-																																								   splice_int1 + 4)]:
-					game_can_continue = 0
-				if 0 in row[splice_int1:(splice_int1 + 4)] or 3 in row[splice_int1:(splice_int1 + 4)]:
-					splice_int1 += 1
-					pass
-				elif 1 in row[splice_int1:(splice_int1 + 4)] and 2 in row[splice_int1:(splice_int1 + 4)]:
-					splice_int1 += 1
-					pass
-				else:
-					game_status = row[splice_int1:(splice_int1 + 4)][0]
-		return ([game_status, game_can_continue])
-
-		# function to check the status of game by verifying spliced lists of all rows of the boards
-	def check_game_status(board, possibilities):
-		game_status = 0
-		game_can_continue = -1
-		for row in board:
-			splice_int1 = 0
-			for i in range(possibilities):
-				if 0 in row[splice_int1:(splice_int1 + 4)]:
-					game_can_continue = 0
-				if 0 in row[splice_int1:(splice_int1 + 4)] or 3 in row[splice_int1:(splice_int1 + 4)]:
-					splice_int1 += 1
-					pass
-				elif 1 in row[splice_int1:(splice_int1 + 4)] and 2 in row[splice_int1:(splice_int1 + 4)]:
-					splice_int1 += 1
-					pass
-				else:
-					game_status = row[splice_int1:(splice_int1 + 4)][0]
-		return ([game_status, game_can_continue])
-
-	# check horizontal wins
-	# print(check_game_status(board, 4))
-	# check horizontal wins
-	# print(check_game_status(board, 4))
-	# check vertical wins
-	# print(check_game_status(vert_board, 3))
-
-	# check diagonal wins
-	# forwards_diagonal
-	# print(check_game_status(diagonal_board(board), 3))
-
-	# backwards_diagonal
-	# print(check_game_status(diagonal_board(reversed_board), 3))
-
-	# computing final status of game
-	final_result = 0
-	if check_game_status(board, 4)[0] != 0:
-		final_result = check_game_status(board, 4)[0]
-	elif check_game_status(vert_board, 3)[0] != 0:
-		final_result = check_game_status(vert_board, 3)[0]
-	elif check_game_status(diagonal_board(board), 3)[0] != 0:
-		final_result = check_game_status(diagonal_board(board), 3)[0]
-	elif check_game_status(diagonal_board(reversed_board), 3)[0] != 0:
-		final_result = check_game_status(diagonal_board(reversed_board), 3)[0]
+	# * Keep Playing or Draw
+	if filled_slots:
+			return 3  # All slots are filled so draw
 	else:
-		if check_game_status(board, 4)[1] == 0 and check_game_status(vert_board, 3)[1] == 0 and \
-				check_game_status(diagonal_board(board), 3)[1] == 0 and \
-				check_game_status(diagonal_board(reversed_board), 3)[0] == 0:
-			pass
-		else:
-			final_result = 3
-
-	return final_result
+		return 0  # There are empty slots left so keep playing
 
 # Copy and paste cpu_player_easy
 def cpu_player_easy(board, player):
@@ -266,166 +214,48 @@ def cpu_player_medium(board, player):
 	:param player: The player whose turn it is, integer value of 1 or 2.
 	:return: Column that the piece was dropped into, int.
 	"""
-	# Implement your solution below
-	#creating another board that has its rows filled with the columns of the original board	
-	vert_board= [0]*len(board[0])
-	def verti_row(board, board_column_index):
-		vert_row = [0]*len(board)
-		row_column_index = -1
-		for row in board:
-			row_column_index += 1
-			vert_row[row_column_index] = row[board_column_index]
-		return vert_row
-			
-	column_index = -1
-	for i in vert_board:
-		column_index +=1
-		vert_board[column_index] = verti_row(board, column_index)
+	opponent = 0
+	if player == 1:
+		opponent = 2
+	else:
+		opponent = 1
 
+	player_move = -1
+	opponent_move = -1
 
-
-		#creating another board that has its rows filled with the diagonals of the original board
-	def diagonal_row(board, row_index, column_index):
-		diag_row = ([-1]*len(board))#use -1 as empty lists containing 0 would give false results
-		diag_index = -1 
-		for row in board:
-			if row_index <= len(board) - 1 and column_index <= len(board[0]) - 1:
-				diag_index += 1
-				diag_row[diag_index] = board[row_index][column_index]
-				column_index += 1
-				row_index += 1
-			else:
-				break
-		return diag_row
-
-	def diagonal_board(board):
-		diag_board = [0] * (len(board) + (len(board[0]) - 1))
-		column_index = 0
-		row_index = len(board)
-		for i in range(len(board) + (len(board[0]) - 1)):
-			if row_index >= 1:
+	for i in range(7):
+		new_board = [row[:] for row in board]
+		if drop_piece(new_board, player, i + 1) == True:
+			new_board = [row[:] for row in board]
+			row_index = 6
+			for row in (new_board):
 				row_index -= 1
-			elif column_index <= (len(board[0]) - 1):
-				column_index += 1
-			diag_board[i] = diagonal_row(board, row_index, column_index)
-		diag_brd = []
-		diag_row = []
-		a=0
-		diag_board = diag_board[::-1]
-		for i in reversed(diag_board):
-			if -1 not in i:
-				a=1
-			if a == 1:
-				diag_brd+=[i]
-			else:
-				while a == 0:
-					for b in i:
-						if b == -1:
-							diag_row+=[-1]
-					for c in i:
-						if c != -1:
-							diag_row+=[c]
-					diag_brd+=[diag_row]
-					diag_row = []
-					break
-		diag_board = diag_brd[::-1]
-		return diag_board
+				if new_board[row_index][i] == 0:
+					new_board[row_index][i] = player
+					if end_of_game(new_board) == player:
+						new_board = [row[:] for row in board]
+						drop_piece(board, player, i + 1)
+						return i + 1
 
-	reversed_board = []
-	for i in board:
-		reversed_board+= [i[::-1]]
+					else:
+						new_board =  [row[:] for row in board]
+						new_board[row_index][i] = opponent
+						if end_of_game(new_board) == opponent:
+							if opponent_move == -1:
+								opponent_move = i + 1
 
 
-		
-		#function to check the status of game by verifying spliced lists of all rows of the boards
-	def check_game_status(board, possibilities, board_type):
-		wins = []
-		rows = 0
-		row_num = 0
-		for row in board:
-			row_num+=1
-			rows+=1
-			splice_int1 = 0
-			for i in range(possibilities+1):
-				if 0 in row[splice_int1:(splice_int1+3)] or -1 in row[splice_int1:(splice_int1+4)]:
-					splice_int1 += 1
-					pass
-				elif 1 in row[splice_int1:(splice_int1+3)] and 2 in row[splice_int1:(splice_int1+4)]:
-					splice_int1 += 1
-					pass
-				else:
-					if 1 in row[splice_int1:(splice_int1+3)] or 2 in row[splice_int1:(splice_int1+3)]:
-						if splice_int1 == 0:
-							if row[splice_int1+3] == 0:
-								wins+=[[rows, splice_int1+4, board_type, row[splice_int1:(splice_int1+3)][0]]]
-								splice_int1+=1
-						elif splice_int1+2 == len(row) - 1:
-							if row[splice_int1-1] == 0:
-								wins+=[[rows, splice_int1, board_type, row[splice_int1:(splice_int1+3)][0]]]
-								splice_int1+=1
-						else:
-							if row[splice_int1-1] == 0:
-								wins+=[[rows, splice_int1, board_type, row[splice_int1:(splice_int1+3)][0]]]
-								splice_int1+=1
-							elif row[splice_int1+3] == 0:
-								wins+=[[rows, splice_int1+4, board_type, row[splice_int1:(splice_int1+3)][0]]]
-								splice_int1+=1
-		return(wins)
-
-
-	win = [check_game_status(board, 4,"horizontal"),check_game_status(vert_board, 3,"vertical"), check_game_status(diagonal_board(board), 3,"forwards_diagonal"), check_game_status(diagonal_board(reversed_board), 3,"backwards_diagonal")]
-	#print(win)
-	move_deciding = []
-	for i in win:
-		for b in i:
-			if b[2] == 'vertical':
-				c = []
-				c+=[[b[1],b[0],b[3]]]
-				move_deciding+=c
-			elif b[2] == 'forwards_diagonal':
-				d = []
-				r = b[0]
-				c = b[1]
-				r -= (c - 1)
-				r = len(board[0]) - (r - 1)
-				rr = c
-				cc = r
-				d+=[[rr,cc,b[3]]]
-				move_deciding+=d
-			elif b[2] == "backwards_diagonal":
-				d = []
-				r = b[0]
-				c = b[1]
-				r -= (c - 1)
-				rr = c
-				cc = r
-				d+=[[rr,cc,b[3]]]
-				move_deciding+=d
-			else:
-				d=[]
-				d+=[[b[0],b[1],b[3]]]
-				move_deciding+=d
-
-	fin_move = []
-	for i in move_deciding:
-		if i[0]!=len(board):
-			if board[i[0]][i[1]-1] != 0:
-				fin_move+=[i]
-		else:
-			fin_move+=[i]
 	cpu_move = -1
-	for i in fin_move:
-		if i[2] == player:
-			return(i[1])
-		else:
-			cpu_move = i[1]
+	cpu_move = opponent_move
 
 	while cpu_move == -1:
 		rand = random.randrange(1,8)
 		if drop_piece(board, player, rand) == True:
 			cpu_move = rand
+			return rand
 
-	return(cpu_move)
+	drop_piece(board, player, cpu_move)
+	return cpu_move
 # Copy and paste cpu_player_hard
 
 
