@@ -258,6 +258,136 @@ def cpu_player_medium(board, player):
 	return cpu_move
 # Copy and paste cpu_player_hard
 
+def cpu_player_hard(board, player):
+	"""
+	Executes a move for the CPU on hard difficulty.
+	This function creates a copy of the board to simulate moves.
+    
+	<Insert player strategy here>
+
+	:param board: The game board, 2D list of 6x7 dimensions.
+	:param player: The player whose turn it is, integer value of 1 or 2.
+	:return: Column that the piece was dropped into, int.
+	"""
+	# Implement your solution below
+	cpu_piece = 2
+
+	def playable_positions(board):
+		#print(board,1)
+		valid_pos = []
+		for col in range(len(board)):
+			brd = [row[:] for row in board]
+			if drop_piece(brd, 1, col):
+				valid_pos += [col]
+		return valid_pos
+
+	def static_eval(board, player):
+		#evaluate board for cpu or opponent based on 1s in a row, 2s in a row
+		#number of centre pieces for each player
+		# * Win Check
+		final_eval = 0
+		cpu_piece = 2
+		def partial_eval(string):
+			partial_eval = 0
+			int_list = []
+			for i in string:
+				int_list += [int(i)]
+			if len(int_list) >= 4:
+				for i in range(len(int_list) - 3):
+					splice_int = i
+					row_of_4 = int_list[i:i+4]
+					if row_of_4.count(cpu_piece) == 4:
+						partial_eval += 20000
+					elif row_of_4.count(player) == 4:
+						partial_eval -= 10000
+					elif row_of_4.count(cpu_piece) == 2 and row_of_4.count(0) == 2:
+						partial_eval += 7
+					elif row_of_4.count(cpu_piece) == 3 and row_of_4.count(0) == 1:
+						partial_eval += 20
+					elif row_of_4.count(player) == 2 and row_of_4.count(0) == 2:
+						partial_eval -= 4
+					elif row_of_4.count(player) == 3 and row_of_4.count(0) == 1:
+						partial_eval -= 17
+			return(partial_eval)
+
+		#evaluating centre of board
+		for row in board:
+			if row[3] == cpu_piece:
+				final_eval += 12
+			elif row[3] == player:
+				final_eval -= 10
+
+# * Rows -> Strings
+		for row in board:
+			row_str = "".join([str(i) for i in row])
+			# If there's a win return the winner
+			final_eval += partial_eval(row_str)
+			
+		for i in range(len(board[0])):
+			column_str = ""
+			for row in board:
+				column_str += str(row[i])
+				final_eval += partial_eval(column_str)
+		def diagonal_check(board):
+			for col in range(3, len(board[0])):
+				part_eval = 0
+				if col == 6:
+					for row in range(3):
+						diagonal_str = ""
+						i = row
+						j = col
+						while i < col and j >= row:
+							diagonal_str += str(board[i][j])
+							i += 1
+							j -= 1
+							part_eval += partial_eval(diagonal_str)
+				else:
+					diagonal_str = ""
+					row = 0
+					i = row
+					j = col
+					while i <= col and j >= row:
+						diagonal_str += str(board[i][j])
+						i += 1
+						j -= 1
+					part_eval += partial_eval(diagonal_str)
+			return(part_eval)
+		final_eval += diagonal_check(board)
+		flipped_board = [row for row in reversed(board)]
+		final_eval += diagonal_check(flipped_board)
+		return final_eval
+
+	
+	def connect4_minimax(board, depth, cpu_move):
+		#maximizing_player =  cpu 
+		#minimizing_player = opponent
+		if depth == 0:
+			return [static_eval(board, 1), None]
+		if cpu_move:
+			colmn = -1
+			best_max_eval = -math.inf
+			for column in playable_positions(board):
+				new_board =  [row[:] for row in board]
+				drop_piece(new_board, 2, column)
+				move_eval = connect4_minimax(new_board, depth - 1, False)[0]
+				if move_eval >= best_max_eval:
+					best_max_eval = move_eval
+					colmn = column
+			return [best_max_eval, colmn]
+		else:
+			colmn = -1
+			best_min_eval = math.inf
+			for column in playable_positions(board):
+				new_board =  [row[:] for row in board]
+				drop_piece(new_board, player, column)
+				move_eval = connect4_minimax(new_board, depth - 1, True)[0]
+				if move_eval <= best_min_eval:
+					best_min_eval = move_eval
+					colmn = column
+			return [best_min_eval, colmn]
+	minimax_eval, column = connect4_minimax(board, 3, True)
+	drop_piece(board, 2, column)
+	return column
 
 def clear_screen():
 	"""
