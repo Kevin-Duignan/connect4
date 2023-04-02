@@ -126,6 +126,7 @@ def cpu_player_medium(board, player):
     :param player: The player whose turn it is, integer value of 1 or 2.
     :return: Column that the piece was dropped into, int.
     """
+	
     opponent = 0
     if player == 1:
         opponent = 2
