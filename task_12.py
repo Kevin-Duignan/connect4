@@ -272,9 +272,8 @@ def cpu_player_hard(board, player):
 	"""
 	# Implement your solution below
 	cpu_piece = 2
-
+    #choose only the available columns to be used in the minimax algorithm
 	def playable_positions(board):
-		#print(board,1)
 		valid_pos = []
 		for col in range(len(board[0])):
 			brd = [row[:] for row in board]
@@ -285,11 +284,9 @@ def cpu_player_hard(board, player):
 	def static_eval(board, player):
 		#evaluate board for cpu or opponent based on 1s in a row, 2s in a row
 		#number of centre pieces for each player
-		# * Win Check
 		final_eval = 0
 		cpu_piece = 2
-
-		def partial_eval(string):
+		def partial_eval(string):#evaluate a row(whether it be vertically, horizontally or diagonally)
 			cpu_piece = 2
 			player = 1
 			partial_eval = 0
@@ -303,15 +300,13 @@ def cpu_player_hard(board, player):
 					if row_of_4.count(cpu_piece) == 4:
 						partial_eval += 100000000
 					if row_of_4.count(player) == 4:
-						#print(row_of_4)
 						partial_eval -= 100000000
-						#print(partial_eval)
 					elif row_of_4.count(cpu_piece) == 2 and row_of_4.count(0) == 2:
 						partial_eval += 2
 					elif row_of_4.count(cpu_piece) == 3 and row_of_4.count(0) == 1:
 						partial_eval += 5
-					#elif row_of_4.count(player) == 2 and row_of_4.count(0) == 2:
-						#partial_eval -= 
+					elif row_of_4.count(player) == 2 and row_of_4.count(0) == 2:
+						partial_eval -= 
 					elif row_of_4.count(player) == 3 and row_of_4.count(0) == 1:
 						partial_eval -= 4
 			return(partial_eval)
@@ -320,20 +315,23 @@ def cpu_player_hard(board, player):
 		for row in board:
 			if row[3] == cpu_piece:
 				final_eval += 3
-			#elif row[3] == player:
-				#final_eval -= 6
-
+			elif row[3] == player:
+				final_eval -= 6
+        
+        #gathering rows of board for evaluation/scoring
         # * Rows -> Strings
 		for row in board:
 			row_str = "".join([str(i) for i in row])
-			# If there's a win return the winner
 			final_eval += partial_eval(row_str)
-			
+		
+        #gathering columns of board for evaluation/scoring
 		for i in range(len(board[0])):
 			column_str = ""
 			for row in board:
 				column_str += str(row[i])
 				final_eval += partial_eval(column_str)
+        
+        #gathering diagonals of board for evaluation/scoring
 		def diagonal_check(board):
 			for col in range(3, len(board[0])):
 				part_eval = 0
@@ -361,40 +359,39 @@ def cpu_player_hard(board, player):
 		final_eval += diagonal_check(board)
 		flipped_board = [row for row in reversed(board)]
 		final_eval += diagonal_check(flipped_board)
-		#print(final_eval)
 		return final_eval
 
 	
-	def connect4_minimax(board, depth, cpu_move):
+	def connect4_minimax(board, depth, cpu_move):#creating an algorithm that looks through future possible moves to judge each move
 		#maximizing_player =  cpu 
 		#minimizing_player = opponent
 		if depth == 0:
 			return [static_eval(board, 1), None]
-		if cpu_move:
+		if cpu_move:#looking into future possible cpu_moves
 			colmn = -1
 			best_max_eval = -math.inf
 			for column in playable_positions(board):
 				new_board =  [row[:] for row in board]
 				drop_piece(new_board, 2, column)
-				move_eval = connect4_minimax(new_board, depth - 1, False)[0]
-				if move_eval >= best_max_eval:
+				move_eval = connect4_minimax(new_board, depth - 1, False)[0]#evaluate board with a new cpu_move made
+				if move_eval >= best_max_eval:#choose best move with highest score for the cpu
 					best_max_eval = move_eval
 					colmn = column
 			return [best_max_eval, colmn]
-		else:
+		else:#looking into future possible player moves
 			colmn = -1
 			best_min_eval = math.inf
 			for column in playable_positions(board):
 				new_board =  [row[:] for row in board]
 				drop_piece(new_board, player, column )
-				move_eval = connect4_minimax(new_board, depth - 1, True)[0]
-				if move_eval <= best_min_eval:
+				move_eval = connect4_minimax(new_board, depth - 1, True)[0]#evaluate board with a new player move made
+				if move_eval <= best_min_eval:#choose worst move with lowest score for the player
 					best_min_eval = move_eval
 					colmn = column
 			return [best_min_eval, colmn]
 	minimax_eval, column = connect4_minimax(board, 2, True)
 	drop_piece(board, 2, column)
-	return column
+	return column #return move that produced best score
 
 
 def clear_screen():
