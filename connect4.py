@@ -343,33 +343,46 @@ def cpu_player_medium(board, player):
     :param player: The player whose turn it is, integer value of 1 or 2.
     :return: Column that the piece was dropped into, int.
     """
-    cpu_player = player
-    human_player = 1 if cpu_player == 2 else 2
 
-    # Check for any possibility of win 
-    for col_index in range(len(board[0])): 
-        cpu_move = col_index + 1
-        new_board = [row[:] for row in board]
-        if drop_piece(new_board, cpu_player, cpu_move):
-            if end_of_game(new_board) == cpu_player:
-                drop_piece(board, cpu_player, cpu_move) # Do a real drop
-                return cpu_move
-    
-    # Check for any possibility of loss
-    for col_index in range(len(board[0])):
-        human_move = col_index + 1
-        new_board = [row[:] for row in board]
-        if drop_piece(new_board, human_player, human_move): # Simulate drop for human
-            if end_of_game(new_board) == human_player: # If that drop wins for the human
-                cpu_move = human_move
-                drop_piece(board, cpu_player, cpu_move) # Block that drop with cpu move
-                return cpu_move
+    opponent = 0
+    if player == 1:
+        opponent = 2
+    else:
+        opponent = 1
+    opponent_move = -1
 
-    # If no move to block or win
-    while True:
-        cpu_move = random.randrange(1, 7)  # random place to drop
-        if drop_piece(board, player, cpu_move):
-            return cpu_move
+#simulate dropping both player and cpu piece in each available column and use end_of_game function to check if that position will produce a win
+    for i in range(7):#7 possible moves/columns to check for immediate wins
+        duplicate_board = [row[:] for row in board]#duplicate board
+        row_index = 6
+        for row in duplicate_board:
+            row_index -= 1
+            if duplicate_board[row_index][i] == 0:
+                duplicate_board[row_index][i] = player#simulate drop_piece for cpu to check for immediate win
+                if end_of_game(duplicate_board) == player:
+                    duplicate_board = [row[:] for row in board]
+                    drop_piece(board, player, i + 1)
+                    return i + 1 #return move as taking an immediate win for cpu is higher priority than possibly blocking opponent move
+
+                else:#simulate drop_piece for opponent to check if there are any immediate wins for them to block by cpu
+                    duplicate_board = [row[:] for row in board]
+                    duplicate_board[row_index][i] = opponent
+                    if end_of_game(duplicate_board) == opponent:
+                        if opponent_move == -1:
+                            opponent_move = i + 1#dont return column move as there could still be an immediate win for cpu
+
+    cpu_move = -1
+    cpu_move = opponent_move#if there was immediate block, value of -1 would change
+
+#if no immediate blocks or immediate wins available, output a random availiable column move
+    while cpu_move == -1:
+        rand = random.randrange(1, 8)
+        if drop_piece(board, player, rand) == True:
+            cpu_move = rand
+            return rand
+#if cpu_move exists(meaning there was an immediate block available to prevent opponent win)
+    drop_piece(board, player, cpu_move)
+    return cpu_move
 
 
 def cpu_player_hard(board, player):
