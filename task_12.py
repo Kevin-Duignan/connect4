@@ -301,29 +301,29 @@ def cpu_player_hard(board, player):
 					splice_int = i
 					row_of_4 = int_list[i:i+4]
 					if row_of_4.count(cpu_piece) == 4:
-						partial_eval += 200
+						partial_eval += 100000000
 					if row_of_4.count(player) == 4:
 						#print(row_of_4)
-						partial_eval -= 200
+						partial_eval -= 100000000
 						#print(partial_eval)
 					elif row_of_4.count(cpu_piece) == 2 and row_of_4.count(0) == 2:
-						partial_eval += 120
+						partial_eval += 2
 					elif row_of_4.count(cpu_piece) == 3 and row_of_4.count(0) == 1:
-						partial_eval += 10
-					elif row_of_4.count(player) == 2 and row_of_4.count(0) == 2:
-						partial_eval -= 110
+						partial_eval += 5
+					#elif row_of_4.count(player) == 2 and row_of_4.count(0) == 2:
+						#partial_eval -= 
 					elif row_of_4.count(player) == 3 and row_of_4.count(0) == 1:
-						partial_eval -= 120
+						partial_eval -= 4
 			return(partial_eval)
 
 		#evaluating centre of board
 		for row in board:
 			if row[3] == cpu_piece:
-				final_eval += 6
+				final_eval += 3
 			#elif row[3] == player:
 				#final_eval -= 6
 
-# * Rows -> Strings
+        # * Rows -> Strings
 		for row in board:
 			row_str = "".join([str(i) for i in row])
 			# If there's a win return the winner
