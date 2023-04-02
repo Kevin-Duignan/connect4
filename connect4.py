@@ -127,6 +127,7 @@ def execute_player_turn(player, board):  # Task 5
     :return: Column that the piece was dropped into, int.
     """
     while True:
+		# input column to drop into
         column = int(
             input(
                 f"Player {player}, please enter the column you would like to drop your piece into: "
@@ -352,7 +353,7 @@ def cpu_player_medium(board, player):
         opponent = 1
     opponent_move = -1
 
-#simulate dropping both player and cpu piece in each available column and use end_of_game function to check if that position will produce a win
+	#simulate dropping both player and cpu piece in each available column and use end_of_game function to check if that position will produce a win
     for i in range(7):#7 possible moves/columns to check for immediate wins
         duplicate_board = [row[:] for row in board]#duplicate board
         row_index = 6
@@ -463,4 +464,3 @@ if __name__ == "__main__":
     board = create_board()
     main()
 
-print("test")
