@@ -1,5 +1,6 @@
 """
 FIT1045: Sem 1 2023 Assignment 1 (Solution Copy)
+Team: The Decryptors
 """
 import random
 import os
@@ -405,6 +406,7 @@ def game_against_cpu():
 
     :return: None
     """
+    # choice of cpu
     cpu_input = validate_input(
         "Please select an option (easy, medium, hard): ", ["easy", "medium", "hard"]
     )
