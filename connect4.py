@@ -4,6 +4,7 @@ Team: The Decryptors
 """
 import random
 import os
+import math
 
 
 def clear_screen():
@@ -388,17 +389,138 @@ def cpu_player_medium(board, player):
 
 
 def cpu_player_hard(board, player):
-    """
-    Executes a move for the CPU on hard difficulty.
-    This function creates a copy of the board to simulate moves.
-    <Insert player strategy here>
+	"""
+	Executes a move for the CPU on hard difficulty.
+	This function creates a copy of the board to simulate moves.
+    
+	<Insert player strategy here>
 
-    :param board: The game board, 2D list of 6x7 dimensions.
-    :param player: The player whose turn it is, integer value of 1 or 2.
-    :return: None
-    """
-    # Implement your solution below
-    raise NotImplementedError
+	:param board: The game board, 2D list of 6x7 dimensions.
+	:param player: The player whose turn it is, integer value of 1 or 2.
+	:return: Column that the piece was dropped into, int.
+	"""
+	# Implement your solution below
+	cpu_piece = 2
+    #choose only the available columns to be used in the minimax algorithm
+	def playable_positions(board):
+		valid_pos = []
+		for col in range(len(board[0])):
+			brd = [row[:] for row in board]
+			if drop_piece(brd, 1, col):
+				valid_pos += [col+1]
+		return valid_pos
+
+	def static_eval(board, player):
+		#evaluate board for cpu or opponent based on 1s in a row, 2s in a row
+		#number of centre pieces for each player
+		final_eval = 0
+		cpu_piece = 2
+		def partial_eval(string):#evaluate a row(whether it be vertically, horizontally or diagonally)
+			cpu_piece = 2
+			player = 1
+			partial_eval = 0
+			int_list = []
+			for i in string:
+				int_list += [int(i)]
+			if len(int_list) >= 4:
+				for i in range(len(int_list) - 3):
+					splice_int = i
+					row_of_4 = int_list[i:i+4]
+					if row_of_4.count(cpu_piece) == 4:
+						partial_eval += 200
+					if row_of_4.count(player) == 4:
+						partial_eval -= 200
+					elif row_of_4.count(cpu_piece) == 2 and row_of_4.count(0) == 2:
+						partial_eval += 120
+					elif row_of_4.count(cpu_piece) == 3 and row_of_4.count(0) == 1:
+						partial_eval += 10
+					elif row_of_4.count(player) == 2 and row_of_4.count(0) == 2:
+						partial_eval -= 110
+					elif row_of_4.count(player) == 3 and row_of_4.count(0) == 1:
+						partial_eval -= 120
+			return(partial_eval)
+
+		#evaluating centre of board
+		for row in board:
+			if row[3] == cpu_piece:
+				final_eval += 6
+			#elif row[3] == player:
+				#final_eval -= 6
+        
+        #gathering rows of board for evaluation/scoring
+        # * Rows -> Strings
+		for row in board:
+			row_str = "".join([str(i) for i in row])
+			final_eval += partial_eval(row_str)
+		
+        #gathering columns of board for evaluation/scoring
+		for i in range(len(board[0])):
+			column_str = ""
+			for row in board:
+				column_str += str(row[i])
+				final_eval += partial_eval(column_str)
+        
+        #gathering diagonals of board for evaluation/scoring
+		def diagonal_check(board):
+			for col in range(3, len(board[0])):
+				part_eval = 0
+				if col == 6:
+					for row in range(3):
+						diagonal_str = ""
+						i = row
+						j = col
+						while i < col and j >= row:
+							diagonal_str += str(board[i][j])
+							i += 1
+							j -= 1
+							part_eval += partial_eval(diagonal_str)
+				else:
+					diagonal_str = ""
+					row = 0
+					i = row
+					j = col
+					while i <= col and j >= row:
+						diagonal_str += str(board[i][j])
+						i += 1
+						j -= 1
+					part_eval += partial_eval(diagonal_str)
+			return(part_eval)
+		final_eval += diagonal_check(board)
+		flipped_board = [row for row in reversed(board)]
+		final_eval += diagonal_check(flipped_board)
+		return final_eval
+
+	
+	def connect4_minimax(board, depth, cpu_move):#creating an algorithm that looks through future possible moves to judge each move
+		#maximizing_player =  cpu 
+		#minimizing_player = opponent
+		if depth == 0:
+			return [static_eval(board, 1), None]
+		if cpu_move:#looking into future possible cpu_moves
+			colmn = -1
+			best_max_eval = -math.inf
+			for column in playable_positions(board):
+				new_board =  [row[:] for row in board]
+				drop_piece(new_board, 2, column)
+				move_eval = connect4_minimax(new_board, depth - 1, False)[0]#evaluate board with a new cpu_move made
+				if move_eval >= best_max_eval:#choose best move with highest score for the cpu
+					best_max_eval = move_eval
+					colmn = column
+			return [best_max_eval, colmn]
+		else:#looking into future possible player moves
+			colmn = -1
+			best_min_eval = math.inf
+			for column in playable_positions(board):
+				new_board =  [row[:] for row in board]
+				drop_piece(new_board, player, column )
+				move_eval = connect4_minimax(new_board, depth - 1, True)[0]#evaluate board with a new player move made
+				if move_eval <= best_min_eval:#choose worst move with lowest score for the player
+					best_min_eval = move_eval
+					colmn = column
+			return [best_min_eval, colmn]
+	minimax_eval, column = connect4_minimax(board, 2, True)
+	drop_piece(board, 2, column)
+	return column #return move that produced best score
 
 
 def game_against_cpu():
